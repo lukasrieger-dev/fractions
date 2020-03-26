@@ -122,3 +122,36 @@ func TestMult(t *testing.T) {
 		})
 	}
 }
+
+func TestFraction_normalize(t *testing.T) {
+	type fields struct {
+		numerator   int
+		denominator int
+	}
+	type result struct {
+		numerator   int
+		denominator int
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   result
+	}{
+		{"normalize1", fields{10, 2}, result{5, 1}},
+		{"normalize2", fields{11, 7}, result{11, 7}},
+		{"normalize3", fields{48, 24}, result{2, 1}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			f := &Fraction{
+				numerator:   tt.fields.numerator,
+				denominator: tt.fields.denominator,
+			}
+			f.Normalize()
+
+			if !(f.numerator == tt.want.numerator && f.denominator == tt.want.denominator) {
+				t.Errorf("Normalize() = %v, want %v", []int{f.numerator, f.denominator}, tt.want)
+			}
+		})
+	}
+}
