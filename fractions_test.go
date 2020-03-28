@@ -50,7 +50,7 @@ func TestDiv(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := Div(tt.args.fract1, tt.args.fract2).toFloat()
+			got := tt.args.fract1.Div(tt.args.fract2).toFloat()
 
 			if got != tt.want {
 				t.Errorf("Div() = %v, want %v", got, tt.want)
@@ -123,7 +123,7 @@ func TestMult(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := Mult(tt.args.fract1, tt.args.fract2).toFloat()
+			got := tt.args.fract1.Mult(tt.args.fract2).toFloat()
 
 			if got != tt.want {
 				t.Errorf("Mult() = %v, want %v", got, tt.want)

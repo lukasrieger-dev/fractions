@@ -53,18 +53,18 @@ func (f fraction) Sub(fract2 fraction) fraction {
 	return f.Add(New(-1*fract2.numerator, fract2.denominator))
 }
 
-func Div(fract1, fract2 fraction) fraction {
-	numerator := fract1.numerator * fract2.denominator
-	denominator := fract1.denominator * fract2.numerator
+func (f fraction) Div(fract fraction) fraction {
+	numerator := f.numerator * fract.denominator
+	denominator := f.denominator * fract.numerator
 
 	result := New(numerator, denominator)
 	//result.Normalize()
 	return result
 }
 
-func Mult(fract1, fract2 fraction) fraction {
-	numerator := fract1.numerator * fract2.numerator
-	denominator := fract1.denominator * fract2.denominator
+func (f fraction) Mult(fract fraction) fraction {
+	numerator := f.numerator * fract.numerator
+	denominator := f.denominator * fract.denominator
 
 	result := fraction{numerator, denominator}
 	//result.Normalize()
