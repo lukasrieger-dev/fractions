@@ -4,10 +4,19 @@ import (
 	"testing"
 )
 
+func TestNew(t *testing.T) {
+	want := fraction{3, 5}
+	got := New(3, 5)
+
+	if !EqualFractions(got, want) {
+		t.Errorf("New() = %v, want %v", got, want)
+	}
+}
+
 func TestDiv(t *testing.T) {
 	type args struct {
-		fract1 Fraction
-		fract2 Fraction
+		fract1 fraction
+		fract2 fraction
 	}
 	tests := []struct {
 		name string
@@ -17,24 +26,24 @@ func TestDiv(t *testing.T) {
 		{
 			name: "division1",
 			args: args{
-				fract1: Fraction{1, 2},
-				fract2: Fraction{5, 2},
+				fract1: fraction{1, 2},
+				fract2: fraction{5, 2},
 			},
 			want: 0.2,
 		},
 		{
 			name: "division2",
 			args: args{
-				fract1: Fraction{5, 1},
-				fract2: Fraction{2, 2},
+				fract1: fraction{5, 1},
+				fract2: fraction{2, 2},
 			},
 			want: 5.0,
 		},
 		{
 			name: "division3",
 			args: args{
-				fract1: Fraction{0, 1},
-				fract2: Fraction{3, 2},
+				fract1: fraction{0, 1},
+				fract2: fraction{3, 2},
 			},
 			want: 0.0,
 		},
@@ -65,7 +74,7 @@ func TestFraction_toFloat(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			f := Fraction{
+			f := fraction{
 				numerator:   tt.fields.numerator,
 				denominator: tt.fields.denominator,
 			}
@@ -78,8 +87,8 @@ func TestFraction_toFloat(t *testing.T) {
 
 func TestMult(t *testing.T) {
 	type args struct {
-		fract1 Fraction
-		fract2 Fraction
+		fract1 fraction
+		fract2 fraction
 	}
 	tests := []struct {
 		name string
@@ -89,24 +98,24 @@ func TestMult(t *testing.T) {
 		{
 			name: "mult1",
 			args: args{
-				fract1: Fraction{1, 2},
-				fract2: Fraction{5, 2},
+				fract1: fraction{1, 2},
+				fract2: fraction{5, 2},
 			},
 			want: 1.25,
 		},
 		{
 			name: "mult2",
 			args: args{
-				fract1: Fraction{5, 1},
-				fract2: Fraction{2, -1},
+				fract1: fraction{5, 1},
+				fract2: fraction{2, -1},
 			},
 			want: -10.0,
 		},
 		{
 			name: "mult3",
 			args: args{
-				fract1: Fraction{0, 1},
-				fract2: Fraction{3, 2},
+				fract1: fraction{0, 1},
+				fract2: fraction{3, 2},
 			},
 			want: 0.0,
 		},
@@ -143,7 +152,7 @@ func TestFraction_normalize(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			f := &Fraction{
+			f := &fraction{
 				numerator:   tt.fields.numerator,
 				denominator: tt.fields.denominator,
 			}
@@ -151,6 +160,52 @@ func TestFraction_normalize(t *testing.T) {
 
 			if !(f.numerator == tt.want.numerator && f.denominator == tt.want.denominator) {
 				t.Errorf("Normalize() = %v, want %v", []int{f.numerator, f.denominator}, tt.want)
+			}
+		})
+	}
+}
+
+func TestAdd(t *testing.T) {
+	type args struct {
+		fract1 fraction
+		fract2 fraction
+	}
+	tests := []struct {
+		name string
+		args args
+		want fraction
+	}{
+		{"add1", args{fraction{10, 3}, fraction{5, 4}}, fraction{55, 12}},
+		{"add2", args{fraction{7, 5}, fraction{9, 10}}, fraction{23, 10}},
+		{"add3", args{fraction{-1, 3}, fraction{2, 6}}, fraction{0, 1}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := tt.args.fract1.Add(tt.args.fract2); !(got.toFloat() == tt.want.toFloat()) {
+				t.Errorf("Add() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestSubtract(t *testing.T) {
+	type args struct {
+		fract1 fraction
+		fract2 fraction
+	}
+	tests := []struct {
+		name string
+		args args
+		want fraction
+	}{
+		{"sub1", args{fraction{10, 3}, fraction{5, 4}}, fraction{25, 12}},
+		{"sub2", args{fraction{7, 5}, fraction{9, 10}}, fraction{5, 10}},
+		{"sub3", args{fraction{-1, 3}, fraction{2, 6}}, fraction{-2, 3}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := tt.args.fract1.Sub(tt.args.fract2); !(got.toFloat() == tt.want.toFloat()) {
+				t.Errorf("Sub() = %v, want %v", got, tt.want)
 			}
 		})
 	}
